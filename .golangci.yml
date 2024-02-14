@@ -1,6 +1,6 @@
 run:
   timeout: 5m
-  skip-files: []
+  skip-files: [ ]
 
 linters-settings:
   govet:
@@ -101,6 +101,10 @@ linters-settings:
       - suite-dont-use-pkg
       - suite-extra-assert-call
       - suite-thelper
+  tagliatelle:
+    case:
+      rules:
+        "json": pascal
 
 linters:
   enable-all: true
@@ -141,6 +145,8 @@ linters:
     - errchkjson
     - nonamedreturns
     - gosmopolitan  # not relevant
+    - goerr113  # not relevant
+    - musttag
 
 issues:
   exclude-use-default: false

@@ -1,0 +1,21 @@
+{
+  "Path": "golang.org/x/example",
+  "Main": true,
+  "Dir": "/home/ldez/sources/golangci-lint/modinfo/testdata/workspace/example",
+  "GoMod": "/home/ldez/sources/golangci-lint/modinfo/testdata/workspace/example/go.mod",
+  "GoVersion": "1.15"
+}
+{
+  "Path": "example.com/hello",
+  "Main": true,
+  "Dir": "/home/ldez/sources/golangci-lint/modinfo/testdata/workspace/hello",
+  "GoMod": "/home/ldez/sources/golangci-lint/modinfo/testdata/workspace/hello/go.mod",
+  "GoVersion": "1.20"
+}
+{
+  "Path": "example.com/world",
+  "Main": true,
+  "Dir": "/home/ldez/sources/golangci-lint/modinfo/testdata/workspace/world",
+  "GoMod": "/home/ldez/sources/golangci-lint/modinfo/testdata/workspace/world/go.mod",
+  "GoVersion": "1.20"
+}

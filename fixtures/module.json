@@ -1,0 +1,7 @@
+{
+  "Path": "github.com/ldez/modupwiz",
+  "Main": true,
+  "Dir": "/home/go/src/github.com/ldez/modupwiz",
+  "GoMod": "/home/go/src/github.com/ldez/modupwiz/go.mod",
+  "GoVersion": "1.22.0"
+}
