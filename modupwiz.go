@@ -124,10 +124,11 @@ func filter(updates []ModulePublic, opts Options, file *modfile.File) []ModulePu
 	var modules []ModulePublic
 
 	for _, update := range updates {
+		// direct deps
 		if opts.Direct && !update.Indirect {
-			// direct deps
 			if update.Replace != nil {
-				fmt.Println(update.Replace.Path)
+				// Skip replaced dependencies.
+				continue
 			}
 
 			modules = append(modules, update)
@@ -135,8 +136,13 @@ func filter(updates []ModulePublic, opts Options, file *modfile.File) []ModulePu
 		}
 
 		if update.Indirect {
+			if update.Replace != nil {
+				// Skip replaced dependencies.
+				continue
+			}
+
+			// indirect deps
 			if opts.AllIndirect {
-				// indirect deps
 				modules = append(modules, update)
 				continue
 			}
