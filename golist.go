@@ -3,10 +3,12 @@ package main
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"os"
 	"os/exec"
+	"strings"
 	"time"
 )
 
@@ -52,7 +54,14 @@ func listUpdates(pipe bool) ([]ModulePublic, error) {
 
 	out, err := cmd.Output()
 	if err != nil {
-		return nil, fmt.Errorf("command go list: %w: %s", err, string(out))
+		extra := string(out)
+
+		var ee *exec.ExitError
+		if errors.As(err, &ee) {
+			extra += string(ee.Stderr)
+		}
+
+		return nil, fmt.Errorf("command '%s': %w: %s", strings.Join(cmd.Args, " "), err, extra)
 	}
 
 	updates, err := extractUpdates(bytes.NewBuffer(out))

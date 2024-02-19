@@ -55,7 +55,14 @@ func getModuleInfo() ([]ModInfo, error) {
 
 	out, err := cmd.Output()
 	if err != nil {
-		return nil, fmt.Errorf("command go list: %w: %s", err, string(out))
+		extra := string(out)
+
+		var ee *exec.ExitError
+		if errors.As(err, &ee) {
+			extra += string(ee.Stderr)
+		}
+
+		return nil, fmt.Errorf("command '%s': %w: %s", strings.Join(cmd.Args, " "), err, extra)
 	}
 
 	info, err := extractModuleInfo(bytes.NewBuffer(out))
