@@ -1,8 +1,8 @@
-.PHONY: clean checks test build install
+.PHONY: clean lint test build install
 
 export CGO_ENABLED=0
 
-default: clean checks test build
+default: clean lint test build
 
 clean:
 	rm -rf dist/ builds/ cover.out
@@ -16,5 +16,5 @@ install: clean
 test: clean
 	go test -v -cover ./...
 
-checks:
+lint:
 	golangci-lint run
