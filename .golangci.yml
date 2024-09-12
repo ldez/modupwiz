@@ -1,10 +1,44 @@
 run:
   timeout: 5m
-  skip-files: [ ]
+
+linters:
+  enable-all: true
+  disable:
+    - exportloopref # deprecated
+    - gomnd # deprecated
+    - cyclop # duplicate of gocyclo
+    - sqlclosecheck # not relevant (SQL)
+    - rowserrcheck # not relevant (SQL)
+    - execinquery # not relevant (SQL)
+    - lll
+    - dupl # not relevant
+    - prealloc # too many false-positive
+    - bodyclose # too many false-positive
+    - testpackage # not relevant
+    - tparallel # not relevant
+    - paralleltest # not relevant
+    - nestif # too many false-positive
+    - nlreturn # not relevant
+    - wsl # not relevant
+    - exhaustive # not relevant
+    - exhaustruct # not relevant
+    - makezero # not relevant
+    - forbidigo
+    - varnamelen # not relevant
+    - nilnil # not relevant
+    - ireturn # not relevant
+    - contextcheck # too many false-positive
+    - tenv # we already have a test "framework" to handle env vars
+    - errchkjson
+    - nonamedreturns
+    - gosmopolitan  # not relevant
+    - err113  # not relevant
+    - musttag
 
 linters-settings:
   govet:
-    check-shadowing: true
+    enable:
+      - shadow
   gocyclo:
     min-complexity: 12
   goconst:
@@ -106,48 +140,6 @@ linters-settings:
       rules:
         "json": pascal
 
-linters:
-  enable-all: true
-  disable:
-    - deadcode # deprecated
-    - exhaustivestruct # deprecated
-    - golint # deprecated
-    - ifshort # deprecated
-    - interfacer # deprecated
-    - maligned # deprecated
-    - nosnakecase # deprecated
-    - scopelint # deprecated
-    - structcheck # deprecated
-    - varcheck # deprecated
-    - cyclop # duplicate of gocyclo
-    - sqlclosecheck # not relevant (SQL)
-    - rowserrcheck # not relevant (SQL)
-    - execinquery # not relevant (SQL)
-    - lll
-    - dupl # not relevant
-    - prealloc # too many false-positive
-    - bodyclose # too many false-positive
-    - testpackage # not relevant
-    - tparallel # not relevant
-    - paralleltest # not relevant
-    - nestif # too many false-positive
-    - nlreturn # not relevant
-    - wsl # not relevant
-    - exhaustive # not relevant
-    - exhaustruct # not relevant
-    - makezero # not relevant
-    - forbidigo
-    - varnamelen # not relevant
-    - nilnil # not relevant
-    - ireturn # not relevant
-    - contextcheck # too many false-positive
-    - tenv # we already have a test "framework" to handle env vars
-    - errchkjson
-    - nonamedreturns
-    - gosmopolitan  # not relevant
-    - goerr113  # not relevant
-    - musttag
-
 issues:
   exclude-use-default: false
   max-issues-per-linter: 0
@@ -162,3 +154,10 @@ issues:
         - funlen
         - goconst
         - maintidx
+
+output:
+  show-stats: true
+  sort-results: true
+  sort-order:
+    - linter
+    - file
