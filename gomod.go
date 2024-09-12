@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -14,8 +15,8 @@ import (
 	"golang.org/x/mod/modfile"
 )
 
-func findModuleInfo() (ModInfo, error) {
-	info, err := getModuleInfo()
+func findModuleInfo(ctx context.Context) (ModInfo, error) {
+	info, err := getModuleInfo(ctx)
 	if err != nil {
 		return ModInfo{}, err
 	}
@@ -50,8 +51,8 @@ type ModInfo struct {
 	Main      bool   `json:"Main"`
 }
 
-func getModuleInfo() ([]ModInfo, error) {
-	cmd := exec.Command("go", "list", "-m", "-json")
+func getModuleInfo(ctx context.Context) ([]ModInfo, error) {
+	cmd := exec.CommandContext(ctx, "go", "list", "-m", "-json")
 
 	out, err := cmd.Output()
 	if err != nil {

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"os"
@@ -86,7 +87,7 @@ func main() {
 			Path:             cliCtx.String("path"),
 		}
 
-		return run(opts)
+		return run(context.Background(), opts)
 	}
 
 	if err := app.Run(os.Args); err != nil {
@@ -94,10 +95,10 @@ func main() {
 	}
 }
 
-func run(opts Options) error {
+func run(ctx context.Context, opts Options) error {
 	var file *modfile.File
 	if opts.ExplicitIndirect && !opts.AllIndirect {
-		info, err := findModuleInfo()
+		info, err := findModuleInfo(ctx)
 		if err != nil {
 			return err
 		}
@@ -108,7 +109,7 @@ func run(opts Options) error {
 		}
 	}
 
-	updates, err := listUpdates(opts.Pipe)
+	updates, err := listUpdates(ctx, opts.Pipe)
 	if err != nil {
 		return err
 	}

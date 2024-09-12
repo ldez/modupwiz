@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -45,12 +46,12 @@ type ModuleError struct {
 	Err string // error text
 }
 
-func listUpdates(pipe bool) ([]ModulePublic, error) {
+func listUpdates(ctx context.Context, pipe bool) ([]ModulePublic, error) {
 	if pipe {
 		return extractUpdates(os.Stdin)
 	}
 
-	cmd := exec.Command("go", "list", "-u", "-m", "-retracted", "-json", "all")
+	cmd := exec.CommandContext(ctx, "go", "list", "-u", "-m", "-retracted", "-json", "all")
 
 	out, err := cmd.Output()
 	if err != nil {
