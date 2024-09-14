@@ -7,6 +7,7 @@ import (
 	"os"
 	"runtime"
 	"slices"
+	"strings"
 
 	"github.com/olekukonko/tablewriter"
 	"github.com/urfave/cli/v2"
@@ -169,6 +170,84 @@ func filter(updates []ModulePublic, opts Options, file *modfile.File) []ModulePu
 	}
 
 	return modules
+}
+
+func renderScript(opts Options, modules []ModulePublic) error {
+	if len(modules) == 0 {
+		log.Println("No updates available. " + opts.scope())
+		return nil
+	}
+
+	writer := os.Stdout
+	if opts.Path != "" {
+		var err error
+		writer, err = os.Create(opts.Path)
+		if err != nil {
+			return fmt.Errorf("create file %s: %w", opts.Path, err)
+		}
+
+		defer func() { _ = writer.Close() }()
+	}
+
+	const (
+		nameX      = "golang.org/x/"
+		nameXOauth = "golang.org/x/oauth2"
+		nameOther  = "other"
+	)
+
+	_, _ = fmt.Fprintln(writer, "#!/bin/sh -e")
+	_, _ = fmt.Fprintln(writer)
+	_, _ = fmt.Fprintln(writer, "git fmul")
+	_, _ = fmt.Fprintln(writer, "git reset --hard upstream/master")
+	_, _ = fmt.Fprintln(writer)
+
+	groups := make(map[string][]ModulePublic)
+
+	for _, module := range modules {
+		switch {
+		case strings.HasPrefix(module.Path, nameXOauth):
+			groups[nameXOauth] = append(groups[nameXOauth], module)
+		case strings.HasPrefix(module.Path, nameX):
+			groups[nameX] = append(groups[nameX], module)
+		default:
+			groups[nameOther] = append(groups[nameOther], module)
+		}
+	}
+
+	if len(groups[nameX]) > 0 {
+		_, _ = fmt.Fprintln(writer, "echo \"chore: update golang.org/x\"")
+		_, _ = fmt.Fprint(writer, "go get")
+		for _, module := range groups[nameX] {
+			_, _ = fmt.Fprintf(writer, " %s@%s", module.Path, module.NewVersion())
+		}
+		_, _ = fmt.Fprintln(writer)
+		_, _ = fmt.Fprintln(writer, "go mod tidy")
+		_, _ = fmt.Fprintln(writer, "git add .; git commit -m \"chore: update golang.org/x\"")
+		_, _ = fmt.Fprintln(writer)
+	}
+
+	if len(groups[nameXOauth]) > 0 {
+		_, _ = fmt.Fprintln(writer, "echo \"chore: update golang.org/x/oauth2\"")
+		_, _ = fmt.Fprint(writer, "go get")
+		for _, module := range groups[nameXOauth] {
+			_, _ = fmt.Fprintf(writer, " %s@%s", module.Path, module.NewVersion())
+		}
+		_, _ = fmt.Fprintln(writer)
+		_, _ = fmt.Fprintln(writer, "go mod tidy")
+		_, _ = fmt.Fprintln(writer, "git add .; git commit -m \"chore: update golang.org/x/oauth2\"")
+		_, _ = fmt.Fprintln(writer)
+	}
+
+	for _, module := range groups[nameOther] {
+		_, _ = fmt.Fprintf(writer, "# %s\n", getCompareLink(module))
+		_, _ = fmt.Fprintf(writer, "echo \"chore: update %s\"\n", module.Path)
+		_, _ = fmt.Fprintf(writer, "go get %s@%s\n", module.Path, module.NewVersion())
+		_, _ = fmt.Fprintln(writer, "go mod tidy")
+		_, _ = fmt.Fprintf(writer, "git add .; git commit -m \"chore: update %s\"\n", module.Path)
+		_, _ = fmt.Fprintln(writer)
+	}
+
+	return nil
 }
 
 func render(opts Options, modules []ModulePublic) error {
