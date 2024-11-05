@@ -115,7 +115,7 @@ func run(ctx context.Context, opts Options) error {
 		return err
 	}
 
-	err = render(opts, filter(updates, opts, file))
+	err = renderScript(opts, filter(updates, opts, file))
 	if err != nil {
 		return err
 	}
