@@ -8,6 +8,7 @@ import (
 	"runtime"
 	"slices"
 
+	"github.com/ldez/modupwiz/internal"
 	"github.com/olekukonko/tablewriter"
 	"github.com/urfave/cli/v2"
 	"golang.org/x/mod/modfile"
@@ -98,31 +99,31 @@ func main() {
 func run(ctx context.Context, opts Options) error {
 	var file *modfile.File
 	if opts.ExplicitIndirect && !opts.AllIndirect {
-		info, err := findModuleInfo(ctx)
+		info, err := internal.FindModuleInfo(ctx)
 		if err != nil {
-			return err
+			return fmt.Errorf("finding module info: %w", err)
 		}
 
-		file, err = readModuleFile(info)
+		file, err = internal.ReadModuleFile(info)
 		if err != nil {
-			return err
+			return fmt.Errorf("reading module file: %w", err)
 		}
 	}
 
-	updates, err := listUpdates(ctx, opts.Pipe)
+	updates, err := internal.ListUpdates(ctx, opts.Pipe)
 	if err != nil {
-		return err
+		return fmt.Errorf("listing updates: %w", err)
 	}
 
 	err = render(opts, filter(updates, opts, file))
 	if err != nil {
-		return err
+		return fmt.Errorf("rendering: %w", err)
 	}
 	return nil
 }
 
-func filter(updates []ModulePublic, opts Options, file *modfile.File) []ModulePublic {
-	var modules []ModulePublic
+func filter(updates []internal.ModulePublic, opts Options, file *modfile.File) []internal.ModulePublic {
+	var modules []internal.ModulePublic
 
 	for _, update := range updates {
 		// direct deps
@@ -171,7 +172,7 @@ func filter(updates []ModulePublic, opts Options, file *modfile.File) []ModulePu
 	return modules
 }
 
-func render(opts Options, modules []ModulePublic) error {
+func render(opts Options, modules []internal.ModulePublic) error {
 	if len(modules) == 0 {
 		log.Println("No updates available. " + opts.scope())
 		return nil

@@ -1,4 +1,4 @@
-package main
+package internal
 
 import (
 	"bytes"
@@ -46,7 +46,7 @@ type ModuleError struct {
 	Err string // error text
 }
 
-func listUpdates(ctx context.Context, pipe bool) ([]ModulePublic, error) {
+func ListUpdates(ctx context.Context, pipe bool) ([]ModulePublic, error) {
 	if pipe {
 		return extractUpdates(os.Stdin)
 	}

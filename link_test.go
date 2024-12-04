@@ -3,13 +3,14 @@ package main
 import (
 	"testing"
 
+	"github.com/ldez/modupwiz/internal"
 	"github.com/stretchr/testify/assert"
 )
 
 func Test_formatLinkPattern(t *testing.T) {
-	module := ModulePublic{
+	module := internal.ModulePublic{
 		Version: "v0.1.0",
-		Update: &ModulePublic{
+		Update: &internal.ModulePublic{
 			Version: "v0.2.0",
 		},
 	}
@@ -88,15 +89,15 @@ func Test_hasCompareLink(t *testing.T) {
 func Test_getCompareLink(t *testing.T) {
 	testCases := []struct {
 		desc     string
-		module   ModulePublic
+		module   internal.ModulePublic
 		expected string
 	}{
 		{
 			desc: "GitHub",
-			module: ModulePublic{
+			module: internal.ModulePublic{
 				Path:    "github.com/example/module",
 				Version: "v0.1.0",
-				Update: &ModulePublic{
+				Update: &internal.ModulePublic{
 					Path:    "github.com/example/module",
 					Version: "v0.2.0",
 				},
@@ -105,10 +106,10 @@ func Test_getCompareLink(t *testing.T) {
 		},
 		{
 			desc: "Gitlab",
-			module: ModulePublic{
+			module: internal.ModulePublic{
 				Path:    "gitlab.com/example/module",
 				Version: "v0.1.0",
-				Update: &ModulePublic{
+				Update: &internal.ModulePublic{
 					Path:    "gitlab.com/example/module",
 					Version: "v0.2.0",
 				},
@@ -117,10 +118,10 @@ func Test_getCompareLink(t *testing.T) {
 		},
 		{
 			desc: "Bitbucket",
-			module: ModulePublic{
+			module: internal.ModulePublic{
 				Path:    "bitbucket.org/example/module",
 				Version: "v0.1.0",
-				Update: &ModulePublic{
+				Update: &internal.ModulePublic{
 					Path:    "bitbucket.org/example/module",
 					Version: "v0.2.0",
 				},
@@ -129,10 +130,10 @@ func Test_getCompareLink(t *testing.T) {
 		},
 		{
 			desc: "major version",
-			module: ModulePublic{
+			module: internal.ModulePublic{
 				Path:    "github.com/example/module/v2",
 				Version: "v0.1.0",
-				Update: &ModulePublic{
+				Update: &internal.ModulePublic{
 					Path:    "github.com/example/module/v2",
 					Version: "v0.2.0",
 				},
@@ -141,10 +142,10 @@ func Test_getCompareLink(t *testing.T) {
 		},
 		{
 			desc: "submodule",
-			module: ModulePublic{
+			module: internal.ModulePublic{
 				Path:    "github.com/example/module/test",
 				Version: "v0.1.0",
-				Update: &ModulePublic{
+				Update: &internal.ModulePublic{
 					Path:    "github.com/example/module/test",
 					Version: "v0.2.0",
 				},
@@ -153,10 +154,10 @@ func Test_getCompareLink(t *testing.T) {
 		},
 		{
 			desc: "submodule and major version",
-			module: ModulePublic{
+			module: internal.ModulePublic{
 				Path:    "github.com/example/module/test/v2",
 				Version: "v0.1.0",
-				Update: &ModulePublic{
+				Update: &internal.ModulePublic{
 					Path:    "github.com/example/module/test/v2",
 					Version: "v0.2.0",
 				},
@@ -165,10 +166,10 @@ func Test_getCompareLink(t *testing.T) {
 		},
 		{
 			desc: "golang.org/x",
-			module: ModulePublic{
+			module: internal.ModulePublic{
 				Path:    "golang.org/x/crypto",
 				Version: "v0.1.0",
-				Update: &ModulePublic{
+				Update: &internal.ModulePublic{
 					Path:    "golang.org/x/crypto",
 					Version: "v0.2.0",
 				},
@@ -177,10 +178,10 @@ func Test_getCompareLink(t *testing.T) {
 		},
 		{
 			desc: "vanity and submodule",
-			module: ModulePublic{
+			module: internal.ModulePublic{
 				Path:    "cloud.google.com/go/compute",
 				Version: "v0.1.0",
-				Update: &ModulePublic{
+				Update: &internal.ModulePublic{
 					Path:    "cloud.google.com/go/compute",
 					Version: "v0.2.0",
 				},
@@ -189,10 +190,10 @@ func Test_getCompareLink(t *testing.T) {
 		},
 		{
 			desc: "vanity and long submodule",
-			module: ModulePublic{
+			module: internal.ModulePublic{
 				Path:    "go.elastic.co/apm/module/apmhttp",
 				Version: "v0.1.0",
-				Update: &ModulePublic{
+				Update: &internal.ModulePublic{
 					Path:    "go.elastic.co/apm/module/apmhttp",
 					Version: "v0.2.0",
 				},
@@ -201,10 +202,10 @@ func Test_getCompareLink(t *testing.T) {
 		},
 		{
 			desc: "vanity and without submodule but long URL",
-			module: ModulePublic{
+			module: internal.ModulePublic{
 				Path:    "go4.org/unsafe/assume-no-moving-gc",
 				Version: "v0.1.0",
-				Update: &ModulePublic{
+				Update: &internal.ModulePublic{
 					Path:    "go4.org/unsafe/assume-no-moving-gc",
 					Version: "v0.2.0",
 				},

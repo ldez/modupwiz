@@ -8,6 +8,7 @@ import (
 	"strings"
 
 	"github.com/ldez/grignotin/metago"
+	"github.com/ldez/modupwiz/internal"
 )
 
 const (
@@ -15,7 +16,7 @@ const (
 	repoNameParts  = 3
 )
 
-func getCompareLink(module ModulePublic) string {
+func getCompareLink(module internal.ModulePublic) string {
 	name := module.Path
 
 	if module.NewVersion() == "" {
@@ -72,7 +73,7 @@ func splitName(name string) (string, string) {
 	return repo, path.Join(n[repoNameParts:]...)
 }
 
-func formatLinkPattern(name, prefix string, module ModulePublic) string {
+func formatLinkPattern(name, prefix string, module internal.ModulePublic) string {
 	var pattern string
 	switch {
 	case strings.HasPrefix(name, "github.com/"):

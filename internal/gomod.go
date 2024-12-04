@@ -1,4 +1,4 @@
-package main
+package internal
 
 import (
 	"bytes"
@@ -15,7 +15,7 @@ import (
 	"golang.org/x/mod/modfile"
 )
 
-func findModuleInfo(ctx context.Context) (ModInfo, error) {
+func FindModuleInfo(ctx context.Context) (ModInfo, error) {
 	info, err := getModuleInfo(ctx)
 	if err != nil {
 		return ModInfo{}, err
@@ -106,8 +106,8 @@ func extractModuleInfo(in io.Reader) ([]ModInfo, error) {
 	return infos, nil
 }
 
-// readModuleFile read the `go.mod` file.
-func readModuleFile(info ModInfo) (*modfile.File, error) {
+// ReadModuleFile read the `go.mod` file.
+func ReadModuleFile(info ModInfo) (*modfile.File, error) {
 	raw, err := os.ReadFile(info.GoMod)
 	if err != nil {
 		return nil, fmt.Errorf("reading go.mod file: %w", err)
