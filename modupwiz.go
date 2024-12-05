@@ -106,12 +106,16 @@ func run(ctx context.Context, opts Options) error {
 		return fmt.Errorf("listing updates: %w", err)
 	}
 
-	err = render(opts, filter(updates, opts, goMod))
+	err = render(ctx, opts, goMod, updates)
 	if err != nil {
 		return fmt.Errorf("rendering: %w", err)
 	}
 
 	return nil
+}
+
+func render(_ context.Context, opts Options, goMod *modfile.File, updates []internal.ModulePublic) error {
+	return renderMarkdown(opts, filter(updates, opts, goMod))
 }
 
 func filter(updates []internal.ModulePublic, opts Options, file *modfile.File) []internal.ModulePublic {

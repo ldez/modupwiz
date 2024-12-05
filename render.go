@@ -9,7 +9,7 @@ import (
 	"github.com/olekukonko/tablewriter"
 )
 
-func render(opts Options, modules []internal.ModulePublic) error {
+func renderMarkdown(opts Options, modules []internal.ModulePublic) error {
 	if len(modules) == 0 {
 		log.Println("No updates available. " + opts.scope())
 		return nil
