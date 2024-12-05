@@ -96,17 +96,9 @@ func main() {
 }
 
 func run(ctx context.Context, opts Options) error {
-	var file *modfile.File
-	if opts.ExplicitIndirect && !opts.AllIndirect {
-		info, err := internal.FindModuleInfo(ctx)
-		if err != nil {
-			return fmt.Errorf("finding module info: %w", err)
-		}
-
-		file, err = internal.ReadModuleFile(info)
-		if err != nil {
-			return fmt.Errorf("reading module file: %w", err)
-		}
+	goMod, err := internal.ReadGoMod(ctx)
+	if err != nil {
+		return fmt.Errorf("reading module file: %w", err)
 	}
 
 	updates, err := internal.ListUpdates(ctx, opts.Pipe)
@@ -114,10 +106,11 @@ func run(ctx context.Context, opts Options) error {
 		return fmt.Errorf("listing updates: %w", err)
 	}
 
-	err = render(opts, filter(updates, opts, file))
+	err = render(opts, filter(updates, opts, goMod))
 	if err != nil {
 		return fmt.Errorf("rendering: %w", err)
 	}
+
 	return nil
 }
 

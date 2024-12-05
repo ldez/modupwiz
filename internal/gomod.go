@@ -9,38 +9,57 @@ import (
 	"io"
 	"os"
 	"os/exec"
+	"path/filepath"
 	"sort"
 	"strings"
 
 	"golang.org/x/mod/modfile"
 )
 
-func FindModuleInfo(ctx context.Context) (ModInfo, error) {
-	info, err := getModuleInfo(ctx)
+// ReadGoMod read the `go.mod` file.
+func ReadGoMod(ctx context.Context) (*modfile.File, error) {
+	modPath, err := getModulePath(ctx)
 	if err != nil {
-		return ModInfo{}, err
+		return nil, err
 	}
 
-	wd, err := os.Getwd()
+	return readModuleFile(modPath)
+}
+
+func getModulePath(ctx context.Context) (string, error) {
+	modulePath, err := getModulePathFromEnv(ctx)
 	if err != nil {
-		return ModInfo{}, fmt.Errorf("current working directory: %w", err)
+		return "", err
 	}
 
-	var found []ModInfo
-	for _, modInfo := range info {
-		if strings.Contains(wd, modInfo.Dir) {
-			found = append(found, modInfo)
+	if modulePath != "" {
+		return modulePath, nil
+	}
+
+	info, err := findModuleInfo(ctx)
+	if err != nil {
+		return "", fmt.Errorf("finding module info: %w", err)
+	}
+
+	return info.GoMod, nil
+}
+
+func getModulePathFromEnv(ctx context.Context) (string, error) {
+	cmd := exec.CommandContext(ctx, "go", "env", "GOMOD")
+
+	out, err := cmd.Output()
+	if err != nil {
+		extra := string(out)
+
+		var ee *exec.ExitError
+		if errors.As(err, &ee) {
+			extra += string(ee.Stderr)
 		}
+
+		return "", fmt.Errorf("command '%s': %w: %s", strings.Join(cmd.Args, " "), err, extra)
 	}
 
-	switch len(found) {
-	case 0:
-		return ModInfo{}, errors.New("no module information found")
-	case 1:
-		return found[0], nil
-	default:
-		return ModInfo{}, fmt.Errorf("found %d modules information, it's the root of a workspace", len(found))
-	}
+	return strings.TrimSpace(string(out)), nil
 }
 
 type ModInfo struct {
@@ -106,9 +125,36 @@ func extractModuleInfo(in io.Reader) ([]ModInfo, error) {
 	return infos, nil
 }
 
-// ReadModuleFile read the `go.mod` file.
-func ReadModuleFile(info ModInfo) (*modfile.File, error) {
-	raw, err := os.ReadFile(info.GoMod)
+func findModuleInfo(ctx context.Context) (ModInfo, error) {
+	info, err := getModuleInfo(ctx)
+	if err != nil {
+		return ModInfo{}, err
+	}
+
+	wd, err := os.Getwd()
+	if err != nil {
+		return ModInfo{}, fmt.Errorf("current working directory: %w", err)
+	}
+
+	var found []ModInfo
+	for _, modInfo := range info {
+		if strings.Contains(wd, modInfo.Dir) {
+			found = append(found, modInfo)
+		}
+	}
+
+	switch len(found) {
+	case 0:
+		return ModInfo{}, errors.New("no module information found")
+	case 1:
+		return found[0], nil
+	default:
+		return ModInfo{}, fmt.Errorf("found %d modules information, it's the root of a workspace", len(found))
+	}
+}
+
+func readModuleFile(modPath string) (*modfile.File, error) {
+	raw, err := os.ReadFile(filepath.Clean(modPath))
 	if err != nil {
 		return nil, fmt.Errorf("reading go.mod file: %w", err)
 	}
