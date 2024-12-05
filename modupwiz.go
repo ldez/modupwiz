@@ -21,6 +21,7 @@ const (
 	flgVersions = "versions"
 	flgPipe     = "pipe"
 	flgPath     = "path"
+	flgTemplate = "template"
 )
 
 var version = "dev"
@@ -34,6 +35,7 @@ type Options struct {
 	Versions         bool
 	Pipe             bool
 	Path             string
+	Template         string
 }
 
 func (o Options) scope() string {
@@ -100,6 +102,39 @@ func main() {
 		return run(context.Background(), opts)
 	}
 
+	app.Commands = []*cli.Command{
+		{
+			Name:   "template",
+			Usage:  "Use a template to transform the module information (experimental).",
+			Hidden: true,
+			Action: func(cliCtx *cli.Context) error {
+				opts := Options{
+					Direct:           cliCtx.Bool(flgDirect),
+					ExplicitIndirect: cliCtx.Bool(flgExplicit),
+					AllIndirect:      cliCtx.Bool(flgIndirect),
+					Compare:          cliCtx.Bool(flgCompare),
+					Versions:         cliCtx.Bool(flgVersions),
+					Pipe:             cliCtx.Bool(flgPipe),
+					Path:             cliCtx.String(flgPath),
+					Template:         cliCtx.String(flgTemplate),
+				}
+
+				if opts.Template == "" {
+					opts.Template = "#DEFAULT#"
+				}
+
+				return run(context.Background(), opts)
+			},
+			Flags: []cli.Flag{
+				&cli.StringFlag{
+					Name:     flgTemplate,
+					Usage:    "Path to a template",
+					Required: false,
+				},
+			},
+		},
+	}
+
 	if err := app.Run(os.Args); err != nil {
 		log.Fatal(err)
 	}
@@ -124,8 +159,14 @@ func run(ctx context.Context, opts Options) error {
 	return nil
 }
 
-func render(_ context.Context, opts Options, goMod *modfile.File, updates []internal.ModulePublic) error {
-	return renderMarkdown(opts, filter(updates, opts, goMod))
+func render(ctx context.Context, opts Options, goMod *modfile.File, updates []internal.ModulePublic) error {
+	filtered := filter(updates, opts, goMod)
+
+	if opts.Template != "" {
+		return renderTemplate(ctx, opts, goMod, filtered)
+	}
+
+	return renderMarkdown(opts, filtered)
 }
 
 func filter(updates []internal.ModulePublic, opts Options, file *modfile.File) []internal.ModulePublic {

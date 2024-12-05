@@ -1,0 +1,14 @@
+#!/bin/sh -e
+
+git fetch --multiple upstream origin
+git reset --hard upstream/master
+{{range $scc := .SCCS}}
+{{- range $mod := $scc}}
+# {{ getCompareLink $mod }}
+{{- end}}
+echo "Update {{ range $mod := $scc}}{{ $mod.Path }}@{{ $mod.NewVersion }} {{end}}"
+go get{{ range $mod := $scc}} {{ $mod.Path }}@{{ $mod.NewVersion }}{{end}}
+go mod tidy
+git add .; git commit
+{{- $length := len $scc }}{{ if gt $length 1 }} -m "Dependency group"{{end}}{{ range $mod := $scc}} -m "{{ $mod.Path }}@{{ $mod.NewVersion }}"{{end}}
+{{end}}
