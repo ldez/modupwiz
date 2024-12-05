@@ -13,6 +13,16 @@ import (
 	"golang.org/x/mod/modfile"
 )
 
+const (
+	flgDirect   = "direct"
+	flgExplicit = "explicit"
+	flgIndirect = "indirect"
+	flgCompare  = "compare"
+	flgVersions = "versions"
+	flgPipe     = "pipe"
+	flgPath     = "path"
+)
+
 var version = "dev"
 
 // Options runner options.
@@ -44,47 +54,47 @@ func main() {
 
 	app.Flags = []cli.Flag{
 		&cli.BoolFlag{
-			Name:  "direct",
+			Name:  flgDirect,
 			Usage: "Only direct modules",
 			Value: true,
 		},
 		&cli.BoolFlag{
-			Name:  "explicit",
+			Name:  flgExplicit,
 			Usage: "Only explicit indirect modules",
 		},
 		&cli.BoolFlag{
-			Name:  "indirect",
+			Name:  flgIndirect,
 			Usage: "All indirect modules",
 		},
 		&cli.BoolFlag{
-			Name:  "compare",
+			Name:  flgCompare,
 			Usage: "Display compare links from GitHub if possible",
 			Value: true,
 		},
 		&cli.BoolFlag{
-			Name:  "versions",
+			Name:  flgVersions,
 			Usage: "Display versions of modules",
 			// Value: true,
 		},
 		&cli.BoolFlag{
-			Name:  "pipe",
+			Name:  flgPipe,
 			Usage: "Allow to pipe the command",
 		},
 		&cli.StringFlag{
-			Name:  "path",
+			Name:  flgPath,
 			Usage: "File path to write the output. (Default: os.Stdout)",
 		},
 	}
 
 	app.Action = func(cliCtx *cli.Context) error {
 		opts := Options{
-			Direct:           cliCtx.Bool("direct"),
-			ExplicitIndirect: cliCtx.Bool("explicit"),
-			AllIndirect:      cliCtx.Bool("indirect"),
-			Compare:          cliCtx.Bool("compare"),
-			Versions:         cliCtx.Bool("versions"),
-			Pipe:             cliCtx.Bool("pipe"),
-			Path:             cliCtx.String("path"),
+			Direct:           cliCtx.Bool(flgDirect),
+			ExplicitIndirect: cliCtx.Bool(flgExplicit),
+			AllIndirect:      cliCtx.Bool(flgIndirect),
+			Compare:          cliCtx.Bool(flgCompare),
+			Versions:         cliCtx.Bool(flgVersions),
+			Pipe:             cliCtx.Bool(flgPipe),
+			Path:             cliCtx.String(flgPath),
 		}
 
 		return run(context.Background(), opts)
