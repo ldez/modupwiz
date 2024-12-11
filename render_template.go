@@ -3,6 +3,7 @@ package main
 import (
 	"bufio"
 	"bytes"
+	"cmp"
 	"context"
 	_ "embed"
 	"errors"
@@ -11,6 +12,7 @@ import (
 	"log"
 	"os"
 	"os/exec"
+	"path/filepath"
 	"strings"
 	"text/template"
 
@@ -111,7 +113,7 @@ func removeRoot(sccs [][]internal.ModulePublic, root internal.ModulePublic) [][]
 }
 
 func generate(opts Options, writer io.Writer, modules []internal.ModulePublic, sccs [][]internal.ModulePublic) error {
-	base := template.New("default.sh.tmpl").
+	base := template.New(cmp.Or(filepath.Base(opts.Template), "default.sh.tmpl")).
 		Funcs(map[string]any{
 			"getCompareLink": getCompareLink,
 		})

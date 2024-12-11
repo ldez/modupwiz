@@ -150,6 +150,11 @@ issues:
         - goconst
         - maintidx
 
+    - path: (.+)_test.go
+      text: 'G304: Potential file inclusion via variable'
+      linters:
+        - gosec
+
 output:
   show-stats: true
   sort-results: true
