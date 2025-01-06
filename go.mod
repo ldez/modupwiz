@@ -3,7 +3,7 @@ module github.com/ldez/modupwiz
 go 1.22.0
 
 require (
-	github.com/ldez/grignotin v0.6.0
+	github.com/ldez/grignotin v0.8.0
 	github.com/olekukonko/tablewriter v0.0.5
 	github.com/stretchr/testify v1.10.0
 	github.com/urfave/cli/v2 v2.27.5

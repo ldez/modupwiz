@@ -2,8 +2,8 @@ github.com/cpuguy83/go-md2man/v2 v2.0.5 h1:ZtcqGrnekaHpVLArFSe4HK5DoKx1T0rq2DwVB
 github.com/cpuguy83/go-md2man/v2 v2.0.5/go.mod h1:tgQtvFlXSQOSOSIRvRPT7W67SCa46tRHOmNcaadrF8o=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
-github.com/ldez/grignotin v0.6.0 h1:i++3002hxD5TpVto0iLjLrfz1V+yEJ+BBk4glb3aqC8=
-github.com/ldez/grignotin v0.6.0/go.mod h1:uaVTr0SoZ1KBii33c47O1M8Jp3OP3YDwhZCmzT9GHEk=
+github.com/ldez/grignotin v0.8.0 h1:M9QeBN2qyPrqwqx+RhG7W2xKjyV7dRWKjNghbz7fkM0=
+github.com/ldez/grignotin v0.8.0/go.mod h1:uaVTr0SoZ1KBii33c47O1M8Jp3OP3YDwhZCmzT9GHEk=
 github.com/mattn/go-runewidth v0.0.9/go.mod h1:H031xJmbD/WCDINGzjvQ9THkh0rPKHF+m2gUSrubnMI=
 github.com/mattn/go-runewidth v0.0.16 h1:E5ScNMtiwvlvB5paMFdw9p4kSQzbXFikJ5SQO6TULQc=
 github.com/mattn/go-runewidth v0.0.16/go.mod h1:Jdepj2loyihRzMpdS35Xk/zdY8IAYHsh153qUoGf23w=
