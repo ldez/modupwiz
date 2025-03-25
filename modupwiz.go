@@ -181,6 +181,7 @@ func filter(updates []internal.ModulePublic, opts Options, file *modfile.File) [
 			}
 
 			modules = append(modules, update)
+
 			continue
 		}
 

@@ -33,6 +33,7 @@ func renderTemplate(ctx context.Context, opts Options, file *modfile.File, modul
 
 	if opts.Path != "" {
 		var err error
+
 		writer, err = os.Create(opts.Path)
 		if err != nil {
 			return fmt.Errorf("create file %s: %w", opts.Path, err)
@@ -119,14 +120,17 @@ func generate(opts Options, writer io.Writer, modules []internal.ModulePublic, s
 		})
 
 	var tmpl *template.Template
+
 	if opts.Template == "#DEFAULT#" {
 		var err error
+
 		tmpl, err = base.Parse(defaultTemplate)
 		if err != nil {
 			return fmt.Errorf("parse default template: %w", err)
 		}
 	} else {
 		var err error
+
 		tmpl, err = base.ParseFiles(opts.Template)
 		if err != nil {
 			return fmt.Errorf("parse template %s: %w", opts.Template, err)

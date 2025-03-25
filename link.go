@@ -24,6 +24,7 @@ func getCompareLink(module internal.ModulePublic) string {
 	}
 
 	var prefix string
+
 	if !hasCompareLink(name) {
 		switch {
 		case strings.HasPrefix(name, "golang.org/x/"):
@@ -75,6 +76,7 @@ func splitName(name string) (string, string) {
 
 func formatLinkPattern(name, prefix string, module internal.ModulePublic) string {
 	var pattern string
+
 	switch {
 	case strings.HasPrefix(name, "github.com/"):
 		pattern = "https://%s/compare/%s...%s"

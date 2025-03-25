@@ -1,17 +1,17 @@
 module github.com/ldez/modupwiz
 
-go 1.22.0
+go 1.24.0
 
 require (
-	github.com/ldez/grignotin v0.8.0
+	github.com/ldez/grignotin v0.9.0
 	github.com/olekukonko/tablewriter v0.0.5
 	github.com/stretchr/testify v1.10.0
-	github.com/urfave/cli/v2 v2.27.5
-	golang.org/x/mod v0.22.0
+	github.com/urfave/cli/v2 v2.27.6
+	golang.org/x/mod v0.24.0
 )
 
 require (
-	github.com/cpuguy83/go-md2man/v2 v2.0.5 // indirect
+	github.com/cpuguy83/go-md2man/v2 v2.0.6 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/mattn/go-runewidth v0.0.16 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect

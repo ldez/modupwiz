@@ -16,8 +16,10 @@ func renderMarkdown(opts Options, modules []internal.ModulePublic) error {
 	}
 
 	writer := os.Stdout
+
 	if opts.Path != "" {
 		var err error
+
 		writer, err = os.Create(opts.Path)
 		if err != nil {
 			return fmt.Errorf("create file %s: %w", opts.Path, err)
@@ -29,9 +31,11 @@ func renderMarkdown(opts Options, modules []internal.ModulePublic) error {
 	table := tablewriter.NewWriter(writer)
 
 	titles := []string{"Module"}
+
 	if opts.Versions {
 		titles = append(titles, "Current", "Latest")
 	}
+
 	if opts.Compare {
 		titles = append(titles, "Compare")
 	}

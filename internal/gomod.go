@@ -137,6 +137,7 @@ func findModuleInfo(ctx context.Context) (ModInfo, error) {
 	}
 
 	var found []ModInfo
+
 	for _, modInfo := range info {
 		if strings.Contains(wd, modInfo.Dir) {
 			found = append(found, modInfo)
