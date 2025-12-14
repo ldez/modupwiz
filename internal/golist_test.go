@@ -33,6 +33,7 @@ func Test_extractUpdates(t *testing.T) {
 	t.Cleanup(func() { _ = f.Close() })
 
 	var expected []ModulePublic
+
 	err = json.NewDecoder(f).Decode(&expected)
 	require.NoError(t, err)
 

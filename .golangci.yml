@@ -33,6 +33,8 @@ linters:
     - testpackage # not relevant
     - tparallel # not relevant
     - varnamelen # not relevant
+    - wsl # deprecated
+    - noinlineerr
 
   settings:
     depguard:

@@ -36,6 +36,7 @@ func (g *Graph) FindSCCs() [][]ModulePublic {
 	var sccs [][]ModulePublic
 
 	var dfs func(v string)
+
 	dfs = func(v string) {
 		indices[v] = index
 		lowLink[v] = index

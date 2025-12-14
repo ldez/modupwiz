@@ -71,6 +71,7 @@ func readJSONFile[T any](t *testing.T, filename string) T {
 	require.NoError(t, err)
 
 	var a T
+
 	err = json.NewDecoder(file).Decode(&a)
 	require.NoError(t, err)
 
