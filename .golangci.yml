@@ -34,6 +34,7 @@ linters:
     - tparallel # not relevant
     - varnamelen # not relevant
     - wsl # deprecated
+    - gomodguard # deprecated
     - noinlineerr
 
   settings:
@@ -51,6 +52,7 @@ linters:
     goconst:
       min-len: 3
       min-occurrences: 3
+      ignore-tests: true
     gocritic:
       disabled-checks:
         - paramTypeCombine # already handle by gofumpt.extra-rules

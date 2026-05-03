@@ -159,11 +159,10 @@ func findMod(modules []internal.ModulePublic, name string) (internal.ModulePubli
 }
 
 func trimAfter(v string) string {
-	index := strings.Index(v, "@")
-
-	if index == -1 {
+	before, _, ok := strings.Cut(v, "@")
+	if !ok {
 		return v
 	}
 
-	return v[:index]
+	return before
 }
